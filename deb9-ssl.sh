@@ -4273,8 +4273,8 @@ service privoxy restart
 
 #clearing history
 history -c
-rm -rf /root/*
-cd /root
+# rm -rf /root/*
+# cd /root
 # info
 clear
 echo " "
@@ -4293,8 +4293,8 @@ echo "   - Auto-Reboot : [OFF]"  | tee -a log-install.txt
 echo "   - IPv6        : [OFF]"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "Application & Port Information"  | tee -a log-install.txt
-echo "   - OpenVPN		: TCP 110 "  | tee -a log-install.txt
-echo "   - OpenVPN-SSL	: 443 "  | tee -a log-install.txt
+echo "   - OpenVPN		: TCP 110"  | tee -a log-install.txt
+echo "   - OpenVPN-SSL	: 443"  | tee -a log-install.txt
 echo "   - Dropbear		: 442"  | tee -a log-install.txt
 echo "   - Stunnel  	: 444"  | tee -a log-install.txt
 echo "   - Squid Proxy	: 3355, 8085 (limit to IP Server)"  | tee -a log-install.txt
