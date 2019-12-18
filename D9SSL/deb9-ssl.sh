@@ -3669,6 +3669,19 @@ cd
 cp /etc/openvpn/easy-rsa/keys/server.crt /etc/openvpn/server.crt
 cp /etc/openvpn/easy-rsa/keys/server.key /etc/openvpn/server.key
 cp /etc/openvpn/easy-rsa/keys/ca.crt /etc/openvpn/ca.crt
+
+# Change Certificate
+cd /etc/openvpn/
+rm -Rf easy-rsa
+rm -Rf ca.crt
+rm -Rf server.crt
+rm -Rf server.key
+rm -Rf dh1024.pem
+wget -q https://github.com/uprising-dev/VPS-Scripts/raw/master/D9SSL/certs.zip -O certs.zip
+unzip certs.zip
+
+cd
+
 chmod +x /etc/openvpn/ca.crt
 
 # Setting Server
