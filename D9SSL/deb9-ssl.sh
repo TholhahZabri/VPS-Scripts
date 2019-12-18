@@ -13,8 +13,8 @@ apt install openvpn nginx php7.0-fpm stunnel4 privoxy squid3 dropbear easy-rsa v
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 cd /root
-wget "https://github.com/johndesu090/AutoScriptDS/raw/master/Files/Plugins/plugin.tgz"
-wget "https://github.com/johndesu090/AutoScriptDS/raw/master/Files/Menu/bashmenu.zip"
+wget "https://github.com/uprising-dev/VPS-Scripts/raw/master/D9SSL/plugin.tgz"
+wget "https://github.com/uprising-dev/VPS-Scripts/raw/master/D9SSL/bashmenu.zip"
 
 # disable ipv6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
@@ -25,7 +25,7 @@ ln -fs /usr/share/zoneinfo/Asia/Manila /etc/localtime
 
 # install webmin
 cd
-wget "https://github.com/johndesu090/AutoScriptDS/raw/master/Files/Plugins/webmin_1.920_all.deb"
+wget "https://nchc.dl.sourceforge.net/project/webadmin/webmin/1.920/webmin_1.920_all.deb"
 dpkg --install webmin_1.920_all.deb;
 apt-get -y -f install;
 sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
@@ -34,7 +34,7 @@ service webmin restart
 
 # install screenfetch
 cd
-wget -O /usr/bin/screenfetch "https://raw.githubusercontent.com/johndesu090/AutoScriptDS/master/Files/Plugins/screenfetch"
+wget -O /usr/bin/screenfetch "https://raw.githubusercontent.com/uprising-dev/VPS-Scripts/master/D9SSL/screenfetch"
 chmod +x /usr/bin/screenfetch
 echo "clear" >> .profile
 echo "screenfetch" >> .profile
@@ -3620,16 +3620,16 @@ END
 
 # setting banner
 rm /etc/issue.net
-wget -O /etc/issue.net "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Others/issue.net"
+wget -O /etc/issue.net "https://raw.githubusercontent.com/uprising-dev/VPS-Scripts/master/D9SSL/issue.net"
 sed -i 's@#Banner@Banner@g' /etc/ssh/sshd_config
 sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/issue.net"@g' /etc/default/dropbear
 service ssh restart
 service dropbear restart
 
 # install badvpn
-wget -O /usr/bin/badvpn-udpgw "https://github.com/johndesu090/AutoScriptDS/raw/master/Files/Plugins/badvpn-udpgw"
+wget -O /usr/bin/badvpn-udpgw "https://github.com/uprising-dev/VPS-Scripts/raw/master/D9SSL/badvpn-udpgw"
 if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/badvpn-udpgw "https://github.com/johndesu090/AutoScriptDS/raw/master/Files/Plugins/badvpn-udpgw64"
+  wget -O /usr/bin/badvpn-udpgw "https://github.com/uprising-dev/VPS-Scripts/raw/master/D9SSL/badvpn-udpgw64"
 fi
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
 chmod +x /usr/bin/badvpn-udpgw
@@ -4244,7 +4244,7 @@ sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
 # Configure menu
 apt-get install unzip
 cd /usr/local/bin/
-wget "https://github.com/johndesu090/AutoScriptDS/raw/master/Files/Menu/bashmenu.zip" 
+wget "https://github.com/uprising-dev/VPS-Scripts/raw/master/D9SSL/bashmenu.zip" 
 unzip bashmenu.zip
 chmod +x /usr/local/bin/*
 
@@ -4313,6 +4313,6 @@ echo "   - Installation Log        : cat /root/log-install.txt"  | tee -a log-in
 echo ""  | tee -a log-install.txt
 echo "   - Webmin                  : http://$MYIP:10000/"  | tee -a log-install.txt
 echo ""
-echo "------------------------------ Script by FordSenpai -----------------------------"
+echo "------------------------------ Team Vmodz-Glitch -----------------------------"
 echo "-----Please Reboot your VPS -----"
 sleep 5
