@@ -1,0 +1,89 @@
+#!/bin/bash
+# Simple create A type DNS record for cloudflare users
+# Script by Bonveio Abitona
+# ©BonvScripts
+# to create, first configure the script using your cloudflare email address, cloudflare global api, cloudflare domain zone id and your domain pointed to cloudflare
+# do not use different zone id and domain.
+# to run this script:
+# bash this-scripts-name.bash your-desired-hostname your-desired-ip-address
+# example:
+#  bash test.bash test.viber 213.22.34.109
+
+# Your CloudFlare EMail Account:
+EMAIL='priipuroll@gmail.com'
+
+# Your CloudFlare Global API Key:
+API_KEY='dc88ca01010fcf271a08c238813ee39ce0d34'
+
+# Your CloudFlare Domain Zone ID:
+ZONE_ID='bfa9b428c0bc31f74991be93441c1fda'
+
+# Your CloudFlare Domain name:
+DOMAIN='kervsdomain.ml'
+
+
+if [[ "$*" == 'help' ]]; then
+echo -e "Simple CloudFlare DNS Maker"
+echo -e "This script only creates \e[1;32mA\e[0m Type dns Records"
+echo -e "To use:"
+echo -e "\e[1;32mbash this-script.bash www.mydns.com 10.23.5.2\e[0m"
+echo -e ""
+echo -e " * this-script.bash is your scripts filename where this script is saved"
+echo -e " * www.mydns.com is your desired hostname"
+echo -e " * 10.23.5.2 is your own ip or your desired ip address"
+fi
+
+if [[ ! -e /usr/bin/curl ]]; then
+ apt-get install curl -y || yum install curl -y
+elif [[ ! -e /usr/bin/python ]]; then
+ apt-get install python -y || yum install python -y
+ elif [[ ! -e /usr/bin/jq ]]; then
+ apt-get install jq -y || yum install jq -y
+fi
+
+HOSTNAME="$1"
+IPADDR="$2"
+
+ping -c 1 "$IPADDR" > /dev/null 2>&1
+if [[ $? -eq 1 ]]; then
+ echo -e "IP Address you entered is not valid or unreachable, exiting..."
+ exit 1
+fi
+
+createDns="$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records" \
+-H "X-Auth-Email: $EMAIL" \
+-H "X-Auth-Key: $API_KEY" \
+-H "Content-Type: application/json" \
+--data "{\"type\":\"A\",\"name\":\"$HOSTNAME\",\"content\":\"$IPADDR\",\"ttl\":1,\"proxied\":false}" \
+| python -m json.tool \
+| grep '\"success\"' \
+| cut -d ':' -f 2 \
+| sed 's/ //g' \
+| sed 's/\"//g' \
+| sed 's/,//g' \
+| head -n1)"
+
+count="$(curl -sX GET "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records?type=A&page=1&per_page=1&order=name&direction=desc&match=all" \
+-H "X-Auth-Key: $API_KEY" \
+-H "X-Auth-Email: $EMAIL" \
+-H "Content-Type: application/json" \
+| python -m json.tool \
+| grep '\"total_count\"' \
+| cut -d ':' -f 2 \
+| sed 's/ //g' \
+| sed 's/\"//g' \
+| sed 's/,//g' \
+| head -n1)"
+
+if [[ "$count" == '1' ]]; then
+ dcounts='Count'
+ else
+ dcounts='Counts'
+fi
+
+echo -e " Status: $createDns"
+echo -e " IP Address: $IPADDR"
+echo -e " Hostname: $HOSTNAME.$DOMAIN"
+echo -e " DNS Record $dcounts: $count"
+echo -e ""
+
